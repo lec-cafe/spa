@@ -1,0 +1,13 @@
+{
+    "name": "mkkn/spa",
+    "authors": [
+        {
+            "name": "mikakane",
+            "email": "mikakane2@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/http": "^5.2",
+        "guzzlehttp/guzzle": "^6.2"
+    }
+}
