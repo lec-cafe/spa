@@ -11,7 +11,7 @@ var loader = function(query){
         var $target = $("#eventList");
         $target.html("");
         data.events.forEach(function(item){
-            var html = "<li>"+item.title+"</li>"
+            var html = "<li><a href='"+item.event_url+"'>"+item.title+"</a></li>"
             $target.append($(html))
         })
     })
@@ -31,6 +31,14 @@ $(function(){
 $(function(){
     $(".pagination a").on("click",function(){
         var start = $(this).data("start")
-        loader({start:start})
+        loader({
+            start:start * $("#numberCount").val(),
+            count: $("#numberCount").val(),
+            keyword: $("[name=keyword]:checked").val()
+        })
+    })
+
+    $("#numberCount").on("focusout",function(){
+        console.log("hgohoe")
     })
 })
