@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+    <!--jQuery-->
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <!--vue.js-->
+    <script src="https://cdn.jsdelivr.net/vue/1.0.26/vue.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <script>
+
+        $(function(){
+
+            var topPage = Vue.extend({
+                template: "#topPage",
+            });
+            Vue.component("top",topPage);
+
+            var eventPage = Vue.extend({
+                template: "#eventPage",
+                data: function(){
+                    return {
+                        events: []
+                    }
+                },
+                created:function(){
+                    var self = this;
+                    var xhr = $.get("http://localhost:8000/api/event.php");
+                    xhr.success(function(data){
+                        self.events = data.events
+                    })
+
+                }
+            });
+            var helpPage = Vue.extend({
+                template: "#helpPage",
+            });
+
+            Vue.component("event",eventPage);
+            Vue.component("help",helpPage);
+
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    page: "top",
+                    message: "hello"
+                },
+                methods: {
+                    route:function(page){
+                        this.page = page;
+                    }
+                }
+            })
+
+        })
+
+    </script>
+
+</head>
+<body >
+    <div class="container" id="app">
+        <h1>SPA Sample</h1>
+        <p>{{{message}}}</p>
+        <p>
+            <a @click="route('top')">TOP</a>
+            <a @click="route('event')">EVENT</a>
+            <a @click="route('help')">HELP</a>
+        </p>
+        <div :is="page"></div>
+        <!--<div is="top"></div>-->
+    </div>
+
+
+    <template id="topPage">
+        こちらはトップページです。
+    </template>
+
+    <template id="eventPage">
+        イベントの一覧を出力します。
+
+        <ul>
+            <li v-for="event in events">
+                {{event.title}}
+            </li>
+        </ul>
+
+    </template>
+
+    <template id="helpPage">
+        こちらはヘルプページです。
+        <h3>よくある質問</h3>
+        <ul>
+            <li>Lorem ipsum dolor sit amet.</li>
+            <li>Lorem ipsum dolor sit amet.</li>
+            <li>Lorem ipsum dolor sit amet.</li>
+        </ul>
+    </template>
+
+
+</body>
+</html>
